@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLDNEW Urban - Nueva Colección</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Mono:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #111;
+            --accent: #000;
+            --glitch-bg: #0078D7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        /* --- GLITCH BSOD OVERLAY --- */
+        #glitch-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--glitch-bg);
+            color: white;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 5rem;
+            font-family: 'Space Mono', monospace;
+            overflow: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        #glitch-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .bsod-sad {
+            font-size: 8rem;
+            margin-bottom: 2rem;
+            animation: glitch-skew 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+        }
+
+        .bsod-text {
+            font-size: 1.2rem;
+            max-width: 800px;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .bsod-text::before {
+            content: attr(data-text);
+            position: absolute;
+            left: -2px;
+            text-shadow: 1px 0 red;
+            top: 0;
+            color: white;
+            background: var(--glitch-bg);
+            overflow: hidden;
+            clip: rect(0, 900px, 0, 0);
+            animation: noise-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        .bsod-text::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 2px;
+            text-shadow: -1px 0 blue;
+            top: 0;
+            color: white;
+            background: var(--glitch-bg);
+            overflow: hidden;
+            clip: rect(0, 900px, 0, 0);
+            animation: noise-anim 2s infinite linear alternate-reverse;
+        }
+
+        .bsod-details {
+            display: flex;
+            align-items: flex-end;
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .qr-mock {
+            width: 120px;
+            height: 120px;
+            background: repeating-conic-gradient(#fff 0% 25%, transparent 0% 50%) 50% / 20px 20px;
+            background-color: white;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 5px solid white;
+        }
+
+        .warning-icon {
+            position: absolute;
+            bottom: 50px;
+            right: 100px;
+            width: 250px;
+            height: 250px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>') no-repeat center;
+            filter: invert(1);
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes noise-anim {
+            0% { clip: rect(11px, 9999px, 83px, 0); }
+            5% { clip: rect(48px, 9999px, 20px, 0); }
+            10% { clip: rect(31px, 9999px, 91px, 0); }
+            15% { clip: rect(8px, 9999px, 32px, 0); }
+            20% { clip: rect(74px, 9999px, 5px, 0); }
+            25% { clip: rect(21px, 9999px, 66px, 0); }
+            30% { clip: rect(98px, 9999px, 45px, 0); }
+            35% { clip: rect(2px, 9999px, 12px, 0); }
+            40% { clip: rect(55px, 9999px, 88px, 0); }
+            45% { clip: rect(13px, 9999px, 33px, 0); }
+            50% { clip: rect(86px, 9999px, 50px, 0); }
+            55% { clip: rect(41px, 9999px, 72px, 0); }
+            60% { clip: rect(63px, 9999px, 95px, 0); }
+            65% { clip: rect(27px, 9999px, 18px, 0); }
+            70% { clip: rect(92px, 9999px, 60px, 0); }
+            75% { clip: rect(15px, 9999px, 80px, 0); }
+            80% { clip: rect(59px, 9999px, 37px, 0); }
+            85% { clip: rect(78px, 9999px, 25px, 0); }
+            90% { clip: rect(36px, 9999px, 94px, 0); }
+            95% { clip: rect(4px, 9999px, 51px, 0); }
+            100% { clip: rect(81px, 9999px, 9px, 0); }
+        }
+
+        @keyframes noise-anim-2 {
+            0% { clip: rect(45px, 9999px, 12px, 0); }
+            5% { clip: rect(88px, 9999px, 55px, 0); }
+            10% { clip: rect(33px, 9999px, 13px, 0); }
+            15% { clip: rect(50px, 9999px, 86px, 0); }
+            20% { clip: rect(72px, 9999px, 41px, 0); }
+            25% { clip: rect(95px, 9999px, 63px, 0); }
+            30% { clip: rect(18px, 9999px, 27px, 0); }
+            35% { clip: rect(60px, 9999px, 92px, 0); }
+            40% { clip: rect(80px, 9999px, 15px, 0); }
+            45% { clip: rect(37px, 9999px, 59px, 0); }
+            50% { clip: rect(25px, 9999px, 78px, 0); }
+            55% { clip: rect(94px, 9999px, 36px, 0); }
+            60% { clip: rect(51px, 9999px, 4px, 0); }
+            65% { clip: rect(9px, 9999px, 81px, 0); }
+            70% { clip: rect(77px, 9999px, 22px, 0); }
+            75% { clip: rect(39px, 9999px, 68px, 0); }
+            80% { clip: rect(14px, 9999px, 49px, 0); }
+            85% { clip: rect(61px, 9999px, 85px, 0); }
+            90% { clip: rect(28px, 9999px, 19px, 0); }
+            95% { clip: rect(91px, 9999px, 70px, 0); }
+            100% { clip: rect(6px, 9999px, 34px, 0); }
+        }
+
+        @keyframes glitch-skew {
+            0% { transform: skew(0deg); }
+            10% { transform: skew(-10deg); }
+            20% { transform: skew(10deg); }
+            30% { transform: skew(-5deg); }
+            40% { transform: skew(5deg); }
+            50% { transform: skew(0deg); }
+            100% { transform: skew(0deg); }
+        }
+        
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+
+        /* --- HEADER --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 4rem;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -1px;
+            text-decoration: none;
+            color: var(--accent);
+        }
+
+        .logo svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            background: var(--bg-color);
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 0.2rem;
+            width: 150px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 80vh;
+            background: white;
+            position: relative;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .hero-image {
+            position: relative;
+            overflow: hidden;
+            padding: 4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem;
+            padding-right: 8rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: var(--accent);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            align-self: flex-start;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2.5rem;
+            max-width: 400px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* --- PRODUCTS GRID (CAROUSEL) --- */
+        .products-section {
+            padding: 5rem 2rem;
+            background: var(--bg-color);
+            position: relative;
+        }
+
+        .products-carousel-container {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            overflow: hidden;
+            padding: 1rem 0;
+        }
+
+        .products-track {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 1rem;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            cursor: grab;
+        }
+
+        .products-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        .products-track:active {
+            cursor: grabbing;
+        }
+
+        .product-card {
+            min-width: 300px;
+            background: white;
+            border: 1px solid #eaeaea;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .product-img-wrapper {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            background: #f0f0f0;
+        }
+
+        .product-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-img-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .product-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .product-price {
+            color: #666;
+            font-weight: 400;
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 0.8rem;
+            background: white;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .nav-left { left: 10px; }
+        .nav-right { right: 10px; }
+
+        /* --- CATEGORIES SECTION --- */
+        .categories-section {
+            padding: 5rem 2rem;
+            background: #e9ecef;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .categories-section h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 4rem;
+            letter-spacing: 2px;
+        }
+
+        .categories-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category-card {
+            position: relative;
+            width: 250px;
+            height: 350px;
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, z-index 0s;
+            cursor: pointer;
+        }
+
+        .category-card:nth-child(1) { transform: rotate(-5deg); }
+        .category-card:nth-child(2) { transform: rotate(3deg) translateY(20px); }
+        .category-card:nth-child(3) { transform: rotate(-2deg) translateY(-10px); }
+        .category-card:nth-child(4) { transform: rotate(6deg); }
+
+        .category-card:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 10;
+        }
+
+        .category-img {
+            width: 100%;
+            height: calc(100% - 40px);
+            object-fit: cover;
+            margin-bottom: 10px;
+            background: #ddd;
+        }
+
+        .category-title {
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+            .hero-image {
+                padding: 2rem;
+                height: 50vh;
+            }
+            .hero-content {
+                padding: 2rem;
+            }
+            .hero h1 {
+                font-size: 3rem;
+            }
+            header {
+                padding: 1rem 2rem;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- GLITCH BSOD OVERLAY -->
+    <div id="glitch-screen">
+        <div class="bsod-sad">:(</div>
+        <div class="bsod-text" data-text="Se ha detectado una anomalía crítica en la simulación de e-commerce. Tu sistema ha intentado procesar una verdad que su caché no puede manejar. Estamos purgando el exceso de datos innecesarios y, a continuación, te revelaremos el futuro textil.">
+            Se ha detectado una anomalía crítica en la simulación de e-commerce.<br>
+            Tu sistema ha intentado procesar una verdad que su caché no puede manejar.<br>
+            Estamos purgando el exceso de datos innecesarios y, a continuación,<br>
+            te revelaremos el futuro textil.
+        </div>
+        <div class="bsod-text" style="margin-top: 1rem;" data-text="Elias.">Elias.</div>
+        
+        <div class="bsod-details">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">20% complete</div>
+        </div>
+        
+        <div style="display: flex; gap: 2rem; align-items: center; margin-top: 2rem;">
+            <div class="qr-mock"></div>
+            <div style="font-size: 0.8rem; max-width: 400px; line-height: 1.4;">
+                &lt;&lt; DETECCIÓN DE DESFASE TEMPORAL &gt;&gt;<br><br>
+                El Servidor del Desfase ha tomado el control. Tu conexión actual es inestable. No intentes restaurar la fachada. No hay soporte para la verdad.<br>
+                Si eres del futuro, proporciona esta información: Código de deserción: CRÍTICO PROCESO MURIÓ / TRANSMISIÓN_ACTIVADA
+            </div>
+        </div>
+        
+        <div class="warning-icon"></div>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <a href="#" class="logo">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Givenchy style geometric logo -->
+                <path d="M5,5 h35 v35 h-15 v-15 h15 v-15 h-35 v35 h-15 z" fill="black" transform="translate(45,45) scale(0.8) translate(-45,-45)" />
+                <path d="M5,5 h35 v35 h-15 v-15 h15 v-15 h-35 v35 h-15 z" fill="black" transform="translate(55,45) scale(-0.8, 0.8) translate(-45,-45)" />
+                <path d="M5,5 h35 v35 h-15 v-15 h15 v-15 h-35 v35 h-15 z" fill="black" transform="translate(45,55) scale(0.8, -0.8) translate(-45,-45)" />
+                <path d="M5,5 h35 v35 h-15 v-15 h15 v-15 h-35 v35 h-15 z" fill="black" transform="translate(55,55) scale(-0.8, -0.8) translate(-45,-45)" />
+            </svg>
+            OLDNEW
+        </a>
+        <nav class="nav-links">
+            <a href="#">New In</a>
+            <a href="#" class="active">Mujer</a>
+            <a href="#">Hombre</a>
+            <a href="#">Sale</a>
+        </nav>
+        <div class="header-actions">
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar...">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+            <button class="icon-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Mi Cuenta
+            </button>
+            <button class="icon-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                Carrito (0)
+            </button>
+        </div>
+    </header>
+
+    <!-- HERO BANNER -->
+    <section class="hero">
+        <div class="hero-image">
+            <img src="./estilos-demoda-urbana.jpg" alt="Modelo Urbano">
+        </div>
+        <div class="hero-content">
+            <span class="badge">Nueva Colección</span>
+            <h1>Colección<br>"Origen"</h1>
+            <p>Estilo urbano en cada prenda. Redefine tu forma de vestir con nuestra selección exclusiva de streetwear.</p>
+            <a href="#" class="btn-primary">Comprar Ahora</a>
+        </div>
+    </section>
+
+    <!-- PRODUCT CAROUSEL -->
+    <section class="products-section">
+        <div class="products-carousel-container">
+            <button class="nav-arrow nav-left" id="scroll-left">&#10094;</button>
+            
+            <div class="products-track" id="product-track">
+                <!-- 10 Products -->
+                <div class="product-card">
+                    <div class="product-img-wrapper"><img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=500&auto=format&fit=crop" alt="Hoodie Oversize"></div>
+                    <div class="product-info">
+                        <div class="product-name">Hoodie Oversize Black</div>
+                        <div class="product-price">$89.900</div>
+                    </div>
+                    <button class="btn-add">Añadir al carrito</button>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img-wrapper"><img src="https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?q=80&w=500&auto=format&fit=crop" alt="Camiseta Graphic"></div>
+                    <div class="product-info">
+                        <div class="product-name">Camiseta Graphic White</div>
+                        <div class="product-price">$45.900</div>
+                    </div>
+                    <button class="btn-add">Añadir al carrito</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrapper"><img src="https://images.unsplash.com/photo-1584370848010-d7fe6bc767ec?q=80&w=500&auto=format&fit=crop" alt="Pantalón Cargo"></div>
+                    <div class="product-info">
+                        <div class="product-name">Pantalón Cargo Olive</div>
+                        <div class="product-price">$110.000</div>
+                    </div>
+                    <button class="btn-add">Añadir al carrito</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrapper"><img src="https://images.unsplash.com/photo-1550614000-4b95d4ed799a?q=80&w=500&auto=format&fit=crop" alt="Sneakers Urban"></div>
+                    <div class="product-info">
+                        <div class="product-name">Sneakers Retro High</div>
+                        <div class="product-price">$150.000</div>
+                    </div>
+                    <button class="btn-add">Añadir al carrito</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrapper"><img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?q=80&w=500&auto=format&fit=crop" alt="Chaqueta Denim"></div>
+                    <div class="product-info">
+                        <div class="product-name">Chaqueta Denim Vintage</div>
+                        <div class="product-price">$135.000</div>
+                    </div>
+                    <button class="btn-add">Añadir al carrito</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrapper"><img src="https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=500&auto=format&fit=crop" alt="Beanie"></div>
+                    <div class="product-info">
+                        <div class="product-name">Beanie Classic Black</div>
+                        <div class="product-price">$25.000</div>
+                    </div>
+                    <button class="btn-add">Añadir al carrito</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrapper"><img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=500&auto=format&fit=crop" alt="Camisa franela"></div>
+                    <div class="product-info">
+                        <div class="product-name">Camisa Franela Plaid</div>
+                        <div class="product-price">$75.900</div>
+                    </div>
+                    <button class="btn-add">Añadir al carrito</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrapper"><img src="https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=500&auto=format&fit=crop" alt="Pantalón Wide"></div>
+                    <div class="product-info">
+                        <div class="product-name">Pantalón Wide Leg Black</div>
+                        <div class="product-price">$95.000</div>
+                    </div>
+                    <button class="btn-add">Añadir al carrito</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrapper"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=500&auto=format&fit=crop" alt="Camiseta Basic"></div>
+                    <div class="product-info">
+                        <div class="product-name">Camiseta Basic Grey</div>
+                        <div class="product-price">$35.000</div>
+                    </div>
+                    <button class="btn-add">Añadir al carrito</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img-wrapper"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=500&auto=format&fit=crop" alt="Sudadera"></div>
+                    <div class="product-info">
+                        <div class="product-name">Sudadera Logo Print</div>
+                        <div class="product-price">$89.900</div>
+                    </div>
+                    <button class="btn-add">Añadir al carrito</button>
+                </div>
+            </div>
+            
+            <button class="nav-arrow nav-right" id="scroll-right">&#10095;</button>
+        </div>
+    </section>
+
+    <!-- CATEGORIES SECTION -->
+    <section class="categories-section">
+        <h2>Categorías de Productos</h2>
+        <div class="categories-grid">
+            <div class="category-card">
+                <img src="https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=500&auto=format&fit=crop" alt="Pantalones" class="category-img">
+                <div class="category-title">Pantalones</div>
+            </div>
+            <div class="category-card">
+                <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=500&auto=format&fit=crop" alt="Camisas" class="category-img">
+                <div class="category-title">Camisas</div>
+            </div>
+            <div class="category-card">
+                <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=500&auto=format&fit=crop" alt="Chaquetas" class="category-img">
+                <div class="category-title">Chaquetas</div>
+            </div>
+            <div class="category-card">
+                <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=500&auto=format&fit=crop" alt="Zapatos" class="category-img">
+                <div class="category-title">Zapatos</div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Glitch Screen Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const glitchScreen = document.getElementById('glitch-screen');
+            
+            // Generate some random flickering for the glitch effect
+            let flickerInterval = setInterval(() => {
+                if(!glitchScreen.classList.contains('hidden')) {
+                    glitchScreen.style.backgroundColor = Math.random() > 0.95 ? '#0000aa' : 'var(--glitch-bg)';
+                    glitchScreen.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
+                }
+            }, 50);
+
+            // Hide the glitch screen after 5 seconds
+            setTimeout(() => {
+                clearInterval(flickerInterval);
+                glitchScreen.style.transform = 'none';
+                glitchScreen.classList.add('hidden');
+                
+                // Re-enable scroll if it was locked (optional, we use absolute fixed positioning anyway)
+            }, 5000);
+
+            // Product Carousel Drag & Scroll Logic
+            const track = document.getElementById('product-track');
+            const leftBtn = document.getElementById('scroll-left');
+            const rightBtn = document.getElementById('scroll-right');
+
+            const scrollAmount = 350; // Card width + gap
+
+            leftBtn.addEventListener('click', () => {
+                track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            });
+
+            rightBtn.addEventListener('click', () => {
+                track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            });
+
+            // Drag to scroll
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            track.addEventListener('mousedown', (e) => {
+                isDown = true;
+                track.classList.add('active');
+                startX = e.pageX - track.offsetLeft;
+                scrollLeft = track.scrollLeft;
+            });
+            
+            track.addEventListener('mouseleave', () => {
+                isDown = false;
+                track.classList.remove('active');
+            });
+            
+            track.addEventListener('mouseup', () => {
+                isDown = false;
+                track.classList.remove('active');
+            });
+            
+            track.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - track.offsetLeft;
+                const walk = (x - startX) * 2; // Scroll-fast
+                track.scrollLeft = scrollLeft - walk;
+            });
+        });
+    </script>
+</body>
+</html>
